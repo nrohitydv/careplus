@@ -7,6 +7,8 @@ import { z } from "zod";
 import { UserFormValidation } from "@/lib/validation";
 import { Form } from "@/components/ui/form";
 import CustomFormField from "../CustomFormField";
+import SumbitButton from "../SumbitButton";
+import { useState } from "react";
 export enum FormFieldType {
   INPUT = "input",
   TEXTAREA = "textarea",
@@ -17,6 +19,7 @@ export enum FormFieldType {
   DATE_PICKER = "datePicker",
 }
 const PatientForm = () => {
+  const [isLoading, useIsLoading] = useState(false);
   const form = useForm<z.infer<typeof UserFormValidation>>({
     resolver: zodResolver(UserFormValidation),
     defaultValues: {
@@ -44,9 +47,25 @@ const PatientForm = () => {
           iconSrc="/assets/icons/user.svg"
           iconAlt="user"
         />
-        <Button type="submit" variant={"primary"}>
-          Get started
-        </Button>
+        <CustomFormField
+          control={form.control}
+          fieldType={FormFieldType.INPUT}
+          name="email"
+          label="Email"
+          placeholder="johndoe@gmail.com"
+          iconSrc="/assets/icons/email.svg"
+          iconAlt="email"
+        />
+        <CustomFormField
+          control={form.control}
+          fieldType={FormFieldType.PHONE_INPUT}
+          name="phone"
+          label="Phone number"
+          placeholder="9812345678"
+          iconSrc="/assets/icons/phone.svg"
+          iconAlt="phone"
+        />
+        <SumbitButton isLoading={isLoading}>Get started</SumbitButton>
       </form>
     </Form>
   );
