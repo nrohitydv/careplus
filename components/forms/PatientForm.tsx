@@ -9,6 +9,7 @@ import { Form } from "@/components/ui/form";
 import CustomFormField from "../CustomFormField";
 import SumbitButton from "../SumbitButton";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 export enum FormFieldType {
   INPUT = "input",
   TEXTAREA = "textarea",
@@ -19,7 +20,8 @@ export enum FormFieldType {
   DATE_PICKER = "datePicker",
 }
 const PatientForm = () => {
-  const [isLoading, useIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const router = useRouter();
   const form = useForm<z.infer<typeof UserFormValidation>>({
     resolver: zodResolver(UserFormValidation),
     defaultValues: {
@@ -28,8 +30,19 @@ const PatientForm = () => {
       phone: "",
     },
   });
-  function onSubmit(data: z.infer<typeof UserFormValidation>) {
-    return console.log(data);
+  async function onSubmit({
+    name,
+    email,
+    phone,
+  }: z.infer<typeof UserFormValidation>) {
+    setIsLoading(true);
+    try {
+      const userData = { name, email, phone };
+      // const user = createUser(userData);
+      // if (user) router.push(`/patients/${user.$id}/register`)
+    } catch (error) {
+      console.log(error);
+    }
   }
   return (
     <Form {...form}>
